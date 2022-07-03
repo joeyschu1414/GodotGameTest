@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Enemy.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/spr_TankBod1.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/spr_TankTurr2.png" type="Texture" id=3]
+[ext_resource path="res://EBullet.tscn" type="PackedScene" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 32.5, 32 )
+
+[node name="Enemy" type="Area2D" groups=["Enemies"]]
+script = ExtResource( 1 )
+Enemy_bullet = ExtResource( 4 )
+
+[node name="EnemyBody" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 2 )
+
+[node name="EnemyTank" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 3 )
+
+[node name="EnemyBulletStart" type="Position2D" parent="EnemyTank"]
+position = Vector2( 15, 0 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="EnemyCollision" type="CollisionShape2D" parent="."]
+position = Vector2( -0.5, 0 )
+shape = SubResource( 1 )
+
+[node name="MoveTimer" type="Timer" parent="."]
+wait_time = 1.468
+
+[node name="EnemyBulletDelay" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="EnemyShotTimer" type="Timer" parent="."]
+wait_time = 1.296
+
+[connection signal="body_entered" from="." to="." method="_on_Enemy_body_entered"]
+[connection signal="timeout" from="MoveTimer" to="." method="EnemyMove"]
+[connection signal="timeout" from="EnemyBulletDelay" to="." method="EnemyFire"]
+[connection signal="timeout" from="EnemyShotTimer" to="." method="_on_EnemyShotTimer_timeout"]

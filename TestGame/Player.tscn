@@ -1,26 +1,37 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/spr_TankBod0.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/spr_TankTurr0.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/spr_TankTurr2.png" type="Texture" id=3]
+[ext_resource path="res://Bullet.tscn" type="PackedScene" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 33, 33 )
+extents = Vector2( 33.5, 32 )
 
 [node name="Player" type="Area2D"]
-position = Vector2( 500, 500 )
 script = ExtResource( 1 )
+Player_bullet = ExtResource( 4 )
 
 [node name="PlayerBody" type="Sprite" parent="."]
 scale = Vector2( 2, 2 )
 texture = ExtResource( 2 )
 
-[node name="PlayerTank" type="Sprite" parent="."]
-position = Vector2( 10, 0 )
+[node name="PlayerTank" type="Node2D" parent="."]
 scale = Vector2( 2, 2 )
+
+[node name="PlayerBulletStart" type="Position2D" parent="PlayerTank"]
+position = Vector2( 20, 0 )
+
+[node name="PlayerTankSprite" type="Sprite" parent="PlayerTank"]
 texture = ExtResource( 3 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
 
+[node name="BulletDelay" type="Timer" parent="."]
+
+[node name="PlayerShotTimer" type="Timer" parent="."]
+wait_time = 0.681
+
 [connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
+[connection signal="timeout" from="PlayerShotTimer" to="." method="_on_PlayerShotTimer_timeout"]
